@@ -1,0 +1,29 @@
+version: "3.4"
+
+services:
+  v2ray:
+    image: v2ray/official:latest
+    container_name: v2ray
+    restart: always
+    networks:
+      - v2ray
+    volumes:
+      - ./v2ray:/etc/v2ray
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    networks:
+      - v2ray
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - v2ray
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    restart: always
+
+networks:
+  v2ray:
